@@ -1,3 +1,5 @@
+require_relative 'rank'
+
 class HandResolver
   def initialize(cards)
     @cards = cards
@@ -15,15 +17,20 @@ class HandResolver
   #     - also, the logic for resolving hands and tiebreakers is in one spot
 
   def pairs
-    n_of_a_kind(2).sort_by { |matches| -matches.first.to_i }
+    return unless one_pair? || two_pairs?
+
+    Rank.new(
+      name: one_pair? ? :one_pair : :two_pair,
+      high: n_of_a_kind(2).flatten.map(&:to_i).max
+    )
   end
 
   def two_pairs?
-    pairs.length == 2
+    n_of_a_kind(2).length == 2
   end
 
   def one_pair?
-    pairs.length == 1
+    n_of_a_kind(2).length == 1
   end
 
 #   def three_of_a_kind
