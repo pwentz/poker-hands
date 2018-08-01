@@ -3,6 +3,17 @@ class HandResolver
     @cards = cards
   end
 
+  # TODO:
+  #  - consider just having a Result object that the resolver returns
+  #  - this Result object will have just two properties:
+  #     - rank
+  #     - high
+  #
+  #  - WHY?
+  #     - this will eliminate the need for tiebreakers
+  #       if you can just return the hand with the highest result
+  #     - also, the logic for resolving hands and tiebreakers is in one spot
+
   def pairs
     n_of_a_kind(2).sort_by { |matches| -matches.first.to_i }
   end
@@ -14,6 +25,13 @@ class HandResolver
   def one_pair?
     pairs.length == 1
   end
+
+#   def three_of_a_kind
+#     Result.new(
+#       rank: :three_of_a_kind,
+#       high: n_of_a_kind(3).flatten.first
+#     )
+#   end
 
   def three_of_a_kind
     n_of_a_kind(3).first

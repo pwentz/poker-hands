@@ -56,6 +56,7 @@ class Hand
     winning_hands = hands.find_all { |hand| hand.send("#{winning_rank}?") }
 
     if winning_hands.length >= 2
+      # winning_hands.max_by { |hand| hand.send(rank).high }
       Hand.tiebreaker(winning_rank, *winning_hands)
     else
       winning_hands.first
