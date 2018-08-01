@@ -7,8 +7,12 @@ class HandResolver
     n_of_a_kind(2).sort_by { |matches| -matches.first.to_i }
   end
 
-  def pairs?
-    pairs.length > 0
+  def two_pairs?
+    pairs.length == 2
+  end
+
+  def one_pair?
+    pairs.length == 1
   end
 
   def three_of_a_kind

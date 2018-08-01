@@ -2,7 +2,7 @@ require_relative '../lib/parser'
 require_relative './mocks/file_reader_mock'
 
 RSpec.describe Parser do
-  describe '#txt' do
+  xdescribe '#txt' do
     it 'parses a text file' do
       hands = Parser.new(FileReaderMock.new).txt("some-file.txt")
 
