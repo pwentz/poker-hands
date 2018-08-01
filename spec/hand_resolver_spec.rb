@@ -173,12 +173,12 @@ RSpec.describe HandResolver do
 
     context 'when there is no full house' do
       let(:cards) do
-        ["KH", "8S", "8H", "8C", "8D"].map { |c| Card.new(c) }
+        ["AS", "TH", "TD", "TS", "4C"].map { |c| Card.new(c) }
       end
 
       it 'returns nil' do
         expect(resolver.full_house?).to be(false)
-        expect(resolver.full_house).to eq([])
+        expect(resolver.full_house).to be_nil
       end
     end
   end

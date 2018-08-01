@@ -32,11 +32,16 @@ class HandResolver
   end
 
   def full_house
-    n_of_a_kind(2..3).sort_by { |matches| -matches.length }
+    three_of_a_kind = n_of_a_kind(3).first
+    two_of_a_kind = n_of_a_kind(2).first
+
+    if three_of_a_kind && two_of_a_kind
+      [three_of_a_kind, two_of_a_kind]
+    end
   end
 
   def full_house?
-    full_house.length > 0
+    !!full_house
   end
 
   def straight?

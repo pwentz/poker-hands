@@ -12,6 +12,7 @@ class Hand
   end
 
   def high
+    @cards.sort_by { |card| -card.to_i }.first
   end
 
   def score
@@ -42,6 +43,68 @@ class Hand
       @resolver.send(method, *args)
     else
       super
+    end
+  end
+
+  def self.max(hand_a, hand_b)
+    winning_rank = ranks.find do |rank|
+      hand_a.send("#{rank}?") || hand_b.send("#{rank}?")
+    end
+
+    tiebreaker = "#{winning_rank}_tiebreaker"
+
+    if hand_a.send("#{winning_rank}?") && hand_b.send("#{winning_rank}?")
+      if Hand.high_card_tiebreakers.include?(winning_rank)
+        Hand.higher_card(hand_a, hand_b)
+      elsif Hand.respond_to?(tiebreaker)
+        Hand.send(tiebreaker, hand_a, hand_b)
+      end
+    elsif hand_a.send("#{winning_rank}?")
+      hand_a
+    else
+      hand_b
+    end
+  end
+
+  def self.higher_card(hand_a, hand_b)
+    if hand_a.high.to_i > hand_b.high.to_i
+      hand_a
+    else
+      hand_b
+    end
+  end
+
+  private
+
+  def self.ranks
+    [
+      :royal_flush,
+      :full_house,
+      :three_of_a_kind
+    ]
+  end
+
+  def self.high_card_tiebreakers
+    [
+      :straight,
+      :straight_flush,
+      :flush
+    ]
+  end
+
+  def self.full_house_tiebreaker(hand_a, hand_b)
+    if hand_a.full_house.flatten.first.to_i > hand_b.full_house.flatten.first.to_i
+      hand_a
+    else
+      hand_b
+    end
+  end
+
+  def self.three_of_a_kind_tiebreaker(hand_a, hand_b)
+    if hand_a.three_of_a_kind.first.to_i > hand_b.three_of_a_kind.first.to_i
+      hand_a
+    else
+      hand_b
     end
   end
 end
