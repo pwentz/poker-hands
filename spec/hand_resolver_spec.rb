@@ -66,38 +66,39 @@ RSpec.describe HandResolver do
     end
   end
 
-  # describe '#three_of_a_kind' do
-    # context 'when there is three of a kind' do
-    #   let(:match_1a) { Card.new("5H") }
-    #   let(:match_1b) { Card.new("5S") }
-    #   let(:match_1c) { Card.new("5D") }
-    #   let(:cards) do
-    #     [
-    #       match_1a,
-    #       Card.new("9D"),
-    #       match_1b,
-    #       Card.new("TC"),
-    #       match_1c
-    #     ]
-    #   end
+  describe '#three_of_a_kind' do
+    context 'when there is three of a kind' do
+      let(:match_1a) { Card.new("5H") }
+      let(:match_1b) { Card.new("5S") }
+      let(:match_1c) { Card.new("5D") }
+      let(:cards) do
+        [
+          match_1a,
+          Card.new("9D"),
+          match_1b,
+          Card.new("TC"),
+          match_1c
+        ]
+      end
 
-    #   it 'returns the cards' do
-    #     expect(resolver.three_of_a_kind?).to be(true)
-    #     expect(resolver.three_of_a_kind).to eq([match_1a, match_1b, match_1c])
-    #   end
-    # end
+      it 'returns the cards' do
+        expect(resolver.three_of_a_kind?).to be(true)
+        expect(resolver.three_of_a_kind.name).to eq(:three_of_a_kind)
+        expect(resolver.three_of_a_kind.high).to eq(3)
+      end
+    end
 
-    # context 'when there is no three of a kind' do
-    #   let(:cards) do
-    #     ["4C", "TH", "4D", "KD", "KS"].map { |c| Card.new(c) }
-    #   end
+    context 'when there is no three of a kind' do
+      let(:cards) do
+        ["4C", "TH", "4D", "KD", "KS"].map { |c| Card.new(c) }
+      end
 
-    #   it 'returns the pairs in descending order of value' do
-    #     expect(resolver.three_of_a_kind?).to be(false)
-    #     expect(resolver.three_of_a_kind).to be_nil
-    #   end
-    # end
-  # end
+      it 'returns the pairs in descending order of value' do
+        expect(resolver.three_of_a_kind?).to be(false)
+        expect(resolver.three_of_a_kind).to be_nil
+      end
+    end
+  end
 
   # describe '#straight?' do
     # context 'when there is a straight in play' do

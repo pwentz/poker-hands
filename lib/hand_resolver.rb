@@ -41,11 +41,16 @@ class HandResolver
 #   end
 
   def three_of_a_kind
-    n_of_a_kind(3).first
+    return unless three_of_a_kind?
+
+    Rank.new(
+      name: :three_of_a_kind,
+      high: n_of_a_kind(3).flatten.first.to_i
+    )
   end
 
   def three_of_a_kind?
-    !!three_of_a_kind
+    n_of_a_kind(3).flatten.any?
   end
 
   def four_of_a_kind
