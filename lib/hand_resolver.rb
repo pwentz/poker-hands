@@ -7,33 +7,56 @@ class HandResolver
     n_of_a_kind(2).sort_by { |matches| -matches.first.to_i }
   end
 
+  def pairs?
+    pairs.length > 0
+  end
+
   def three_of_a_kind
     n_of_a_kind(3).first
+  end
+
+  def three_of_a_kind?
+    !!three_of_a_kind
   end
 
   def four_of_a_kind
     n_of_a_kind(4).first
   end
 
-  def straight?
-    sorted_cards = @cards.sort_by(&:to_i)
+  def four_of_a_kind?
+    !!four_of_a_kind
+  end
 
-    sorted_cards
-      .drop(1)
-      .reduce({continue?: true, last: sorted_cards.first }) do |acc, card|
-        acc.merge({
-          continue?: acc[:continue?] && (acc[:last].to_i + 1 == card.to_i),
-          last: card
-        })
-      end[:continue?]
+  def full_house
+    n_of_a_kind(2..3).sort_by { |matches| -matches.length }
+  end
+
+  def full_house?
+    full_house.length > 0
+  end
+
+  def straight?
+    first, *rest = sorted_cards.map(&:to_i)
+
+    rest.reduce({ continue?: true, last: first }) do |acc, n|
+      {
+        continue?: acc[:continue?] && (acc[:last] + 1 == n),
+        last: n
+      }
+    end[:continue?]
   end
 
   def flush?
     @cards.map(&:suit).uniq.length == 1
   end
 
-  def full_house
-    n_of_a_kind(2..3).sort_by { |matches| -matches.length }
+  def straight_flush?
+    straight? && flush?
+  end
+
+  def royal_flush?
+    flush? &&
+      sorted_cards.map(&:value) == %w{T J Q K A}
   end
 
   private
@@ -49,7 +72,7 @@ class HandResolver
       end
   end
 
-# Four of a Kind: Four cards of the same value.
-# Straight Flush: All cards are consecutive values of same suit.
-# Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
+  def sorted_cards
+    @cards.sort_by(&:to_i)
+  end
 end

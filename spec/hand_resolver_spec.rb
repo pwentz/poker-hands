@@ -18,6 +18,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pair of cards' do
+        expect(resolver.pairs?).to be(true)
         expect(resolver.pairs).to eq([
           [match_1a, match_1b]
         ])
@@ -40,6 +41,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
+        expect(resolver.pairs?).to be(true)
         expect(resolver.pairs).to eq([
           [match_2a, match_2b],
           [match_1a, match_1b]
@@ -59,6 +61,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns an empty array' do
+        expect(resolver.pairs?).to be(false)
         expect(resolver.pairs).to eq([])
       end
     end
@@ -80,6 +83,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the cards' do
+        expect(resolver.three_of_a_kind?).to be(true)
         expect(resolver.three_of_a_kind).to eq([match_1a, match_1b, match_1c])
       end
     end
@@ -90,6 +94,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
+        expect(resolver.three_of_a_kind?).to be(false)
         expect(resolver.three_of_a_kind).to be_nil
       end
     end
@@ -157,6 +162,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
+        expect(resolver.full_house?).to be(true)
         expect(resolver.full_house).to eq([
           [match_1a, match_1b, match_1c],
           [match_2a, match_2b]
@@ -170,6 +176,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns nil' do
+        expect(resolver.full_house?).to be(false)
         expect(resolver.full_house).to eq([])
       end
     end
@@ -192,6 +199,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
+        expect(resolver.four_of_a_kind?).to be(true)
         expect(resolver.four_of_a_kind).to eq([
           match_1a, match_1b, match_1c, match_1d
         ])
@@ -204,7 +212,52 @@ RSpec.describe HandResolver do
       end
 
       it 'returns nil' do
+        expect(resolver.four_of_a_kind?).to be(false)
         expect(resolver.four_of_a_kind).to be_nil
+      end
+    end
+  end
+
+  describe '#straight_flush?' do
+    context 'when a straight flush is present' do
+      let(:cards) do
+        ["8C", "5C", "9C", "6C", "7C"].map { |c| Card.new(c) }
+      end
+
+      it 'returns true' do
+        expect(resolver.straight_flush?).to be(true)
+      end
+    end
+
+    context 'when a straight flush is not present' do
+      let(:cards) do
+        ["8C", "5C", "KC", "6C", "7C"].map { |c| Card.new(c) }
+      end
+
+      it 'returns true' do
+        expect(resolver.straight_flush?).to be(false)
+      end
+    end
+  end
+
+  describe '#royal_flush?' do
+    context 'when a royal flush is present' do
+      let(:cards) do
+        ["KC", "QC", "JC", "TC", "AC"].map { |c| Card.new(c) }
+      end
+
+      it 'returns true' do
+        expect(resolver.royal_flush?).to be(true)
+      end
+    end
+
+    context 'when a royal flush is not present' do
+      let(:cards) do
+        ["KC", "QC", "JC", "TC", "AD"].map { |c| Card.new(c) }
+      end
+
+      it 'returns true' do
+        expect(resolver.royal_flush?).to be(false)
       end
     end
   end
