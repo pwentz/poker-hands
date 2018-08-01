@@ -46,35 +46,37 @@ class Hand
     end
   end
 
-  def self.max(hand_a, hand_b)
+  def self.max(*hands)
     winning_rank = ranks.find do |rank|
-      hand_a.send("#{rank}?") || hand_b.send("#{rank}?")
+      hands.any? { |hand| hand.send("#{rank}?") }
     end
 
-    tiebreaker = "#{winning_rank}_tiebreaker"
+    return Hand.higher_card(*hands) if winning_rank.nil?
 
-    if hand_a.send("#{winning_rank}?") && hand_b.send("#{winning_rank}?")
-      if Hand.high_card_tiebreakers.include?(winning_rank)
-        Hand.higher_card(hand_a, hand_b)
-      elsif Hand.respond_to?(tiebreaker)
-        Hand.send(tiebreaker, hand_a, hand_b)
-      end
-    elsif hand_a.send("#{winning_rank}?")
-      hand_a
+    winning_hands = hands.find_all { |hand| hand.send("#{winning_rank}?") }
+
+    if winning_hands.length >= 2
+      Hand.tiebreaker(winning_rank, *winning_hands)
     else
-      hand_b
+      winning_hands.first
     end
   end
 
-  def self.higher_card(hand_a, hand_b)
-    if hand_a.high.to_i > hand_b.high.to_i
-      hand_a
-    else
-      hand_b
-    end
+  def self.higher_card(*hands)
+    hands.max_by { |hand| hand.high.to_i }
   end
 
   private
+
+  def self.tiebreaker(rank, *hands)
+    tiebreaker_method = "#{rank}_tiebreaker"
+
+    if Hand.high_card_tiebreakers.include?(rank)
+      Hand.higher_card(*hands)
+    elsif Hand.respond_to?(tiebreaker_method)
+      Hand.send(tiebreaker_method, *hands)
+    end
+  end
 
   def self.ranks
     [
@@ -92,20 +94,12 @@ class Hand
     ]
   end
 
-  def self.full_house_tiebreaker(hand_a, hand_b)
-    if hand_a.full_house.flatten.first.to_i > hand_b.full_house.flatten.first.to_i
-      hand_a
-    else
-      hand_b
-    end
+  def self.full_house_tiebreaker(*hands)
+    hands.max_by { |hand| hand.full_house.flatten.first.to_i }
   end
 
-  def self.three_of_a_kind_tiebreaker(hand_a, hand_b)
-    if hand_a.three_of_a_kind.first.to_i > hand_b.three_of_a_kind.first.to_i
-      hand_a
-    else
-      hand_b
-    end
+  def self.three_of_a_kind_tiebreaker(*hands)
+    hands.max_by { |hand| hand.three_of_a_kind.first.to_i }
   end
 end
 
