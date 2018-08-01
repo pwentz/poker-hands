@@ -28,7 +28,7 @@ RSpec.describe Hand do
     end
   end
 
-  describe '#high' do
+  xdescribe '#high' do
     it 'returns the high card in the hand' do
       expect(hand.high).to eq("KC")
     end

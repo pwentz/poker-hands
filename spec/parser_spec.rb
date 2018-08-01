@@ -4,7 +4,7 @@ require_relative './mocks/file_reader_mock'
 RSpec.describe Parser do
   describe '#txt' do
     it 'parses a text file' do
-      hands = Parser.new(FileReaderMock.new).txt(file: "some-file.txt", cards: 5)
+      hands = Parser.new(FileReaderMock.new).txt("some-file.txt")
 
       expect(hands[:player_1].map(&:to_a)).to eq([
         %w{8C TS KC 9H 4S},
