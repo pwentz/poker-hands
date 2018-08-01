@@ -18,7 +18,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pair of cards' do
-        expect(resolver.pairs?).to be(true)
+        expect(resolver.one_pair?).to be(true)
         expect(resolver.pairs).to eq([
           [match_1a, match_1b]
         ])
@@ -41,7 +41,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
-        expect(resolver.pairs?).to be(true)
+        expect(resolver.two_pairs?).to be(true)
         expect(resolver.pairs).to eq([
           [match_2a, match_2b],
           [match_1a, match_1b]
@@ -61,7 +61,8 @@ RSpec.describe HandResolver do
       end
 
       it 'returns an empty array' do
-        expect(resolver.pairs?).to be(false)
+        expect(resolver.one_pair?).to be(false)
+        expect(resolver.two_pairs?).to be(false)
         expect(resolver.pairs).to eq([])
       end
     end
