@@ -12,9 +12,13 @@ class Card
     @suit = raw_card[1]
   end
 
+  def to_i
+    CARDS_BY_VALUE.index(value)
+  end
+
   def self.max(*cards)
     cards.reduce do |highest, card|
-      if CARDS_BY_VALUE.index(highest.value) >= CARDS_BY_VALUE.index(card.value)
+      if highest.to_i >= card.to_i
         highest
       else
         card
