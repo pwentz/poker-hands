@@ -5,17 +5,6 @@ class HandResolver
     @cards = cards
   end
 
-  # TODO:
-  #  - consider just having a Result object that the resolver returns
-  #  - this Result object will have just two properties:
-  #     - rank
-  #     - high
-  #
-  #  - WHY?
-  #     - this will eliminate the need for tiebreakers
-  #       if you can just return the hand with the highest result
-  #     - also, the logic for resolving hands and tiebreakers is in one spot
-
   def pairs
     return unless one_pair? || two_pairs?
 
@@ -33,13 +22,6 @@ class HandResolver
     n_of_a_kind(2).length == 1
   end
 
-#   def three_of_a_kind
-#     Result.new(
-#       rank: :three_of_a_kind,
-#       high: n_of_a_kind(3).flatten.first
-#     )
-#   end
-
   def three_of_a_kind
     return unless three_of_a_kind?
 
@@ -54,24 +36,29 @@ class HandResolver
   end
 
   def four_of_a_kind
-    n_of_a_kind(4).first
+    return unless four_of_a_kind?
+
+    Rank.new(
+      name: :four_of_a_kind,
+      high: n_of_a_kind(4).flatten.first.to_i
+    )
   end
 
   def four_of_a_kind?
-    !!four_of_a_kind
+    n_of_a_kind(4).flatten.any?
   end
 
   def full_house
-    three_of_a_kind = n_of_a_kind(3).first
-    two_of_a_kind = n_of_a_kind(2).first
+    return unless full_house?
 
-    if three_of_a_kind && two_of_a_kind
-      [three_of_a_kind, two_of_a_kind]
-    end
+    Rank.new(
+      name: :full_house,
+      high: [n_of_a_kind(3), n_of_a_kind(2)].flatten.map(&:to_i).max
+    )
   end
 
   def full_house?
-    !!full_house
+    !!(n_of_a_kind(3).first && n_of_a_kind(2).first)
   end
 
   def straight?
@@ -104,11 +91,7 @@ class HandResolver
     @cards
       .group_by(&:value)
       .values
-      .find_all do |matches|
-        n.is_a?(Range) ?
-          n.cover?(matches.length) :
-          matches.length == n
-      end
+      .find_all { |matches| matches.length == n }
   end
 
   def sorted_cards
