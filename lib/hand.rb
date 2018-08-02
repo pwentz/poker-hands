@@ -19,10 +19,6 @@ class Hand
     @resolver = RankResolver.new(cards)
   end
 
-  def to_a
-    @cards
-  end
-
   def high
     @cards.max_by(&:to_i)
   end
@@ -35,33 +31,35 @@ class Hand
     end
   end
 
-  def self.max(*hands)
-    winning_rank = RANKS.find do |rank|
-      hands.any? { |hand| hand.send("#{rank}?") }
+  class << self
+    def max(*hands)
+      winning_rank = RANKS.find do |rank|
+        hands.any? { |hand| hand.send("#{rank}?") }
+      end
+
+      return highest_card(*hands) if winning_rank.nil?
+
+      winning_hands = hands.find_all { |hand| hand.send("#{winning_rank}?") }
+
+      if winning_hands.length >= 2
+        tiebreaker(winning_rank, *winning_hands)
+      else
+        winning_hands.first
+      end
     end
 
-    return higher_card(*hands) if winning_rank.nil?
-
-    winning_hands = hands.find_all { |hand| hand.send("#{winning_rank}?") }
-
-    if winning_hands.length >= 2
-      tiebreaker(winning_rank, *winning_hands)
-    else
-      winning_hands.first
+    def highest_card(*hands)
+      hands.max_by { |hand| hand.high.to_i }
     end
-  end
 
-  def self.higher_card(*hands)
-    hands.max_by { |hand| hand.high.to_i }
-  end
+    private
 
-  private
+    def tiebreaker(rank, *hands)
+      return if rank == :royal_flush
 
-  def self.tiebreaker(rank, *hands)
-    return if rank == :royal_flush
-
-    hands.max_by do |hand|
-      hand.send(rank).high
+      hands.max_by do |hand|
+        hand.send(rank).high
+      end
     end
   end
 end

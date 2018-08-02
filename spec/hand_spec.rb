@@ -164,7 +164,7 @@ RSpec.describe Hand do
         ["JC", "JH", "9H", "7S", "9D"].map { |c| Card.new(c) }
       end
 
-      xit 'returns the hand with the highest pair' do
+      it 'returns the hand with the highest pair' do
         expect(Hand.max(hand, hand_b)).to be hand_b
       end
     end
@@ -178,7 +178,7 @@ RSpec.describe Hand do
         ["AS", "6D", "JS", "4C", "JH"].map { |c| Card.new(c) }
       end
 
-      xit 'returns the hand with the high pair' do
+      it 'returns the hand with the high pair' do
         expect(Hand.max(hand, hand_b)).to be hand
       end
     end
