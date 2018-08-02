@@ -139,7 +139,7 @@ RSpec.describe RankResolver do
       it 'returns the pairs in descending order of value' do
         expect(resolver.full_house?).to be true
         expect(resolver.full_house.name).to eq :full_house
-        expect(resolver.full_house.high).to eq 11
+        expect(resolver.full_house.high).to eq 5
       end
     end
 
