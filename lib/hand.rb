@@ -2,6 +2,18 @@ require_relative './card'
 require_relative './rank_resolver'
 
 class Hand
+  RANKS = [
+    :royal_flush,
+    :straight_flush,
+    :four_of_a_kind,
+    :full_house,
+    :flush,
+    :straight,
+    :three_of_a_kind,
+    :two_pair,
+    :one_pair
+  ]
+
   def initialize(cards)
     @cards = cards
     @resolver = RankResolver.new(cards)
@@ -24,7 +36,7 @@ class Hand
   end
 
   def self.max(*hands)
-    winning_rank = ranks.find do |rank|
+    winning_rank = RANKS.find do |rank|
       hands.any? { |hand| hand.send("#{rank}?") }
     end
 
@@ -51,19 +63,5 @@ class Hand
     hands.max_by do |hand|
       hand.send(rank).high
     end
-  end
-
-  def self.ranks
-    [
-      :royal_flush,
-      :straight_flush,
-      :four_of_a_kind,
-      :full_house,
-      :flush,
-      :straight,
-      :three_of_a_kind,
-      :two_pair,
-      :one_pair
-    ]
   end
 end

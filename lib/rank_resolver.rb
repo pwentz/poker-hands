@@ -71,14 +71,8 @@ class RankResolver
   end
 
   def straight?
-    first, *rest = sorted_cards.map(&:to_i)
-
-    rest.reduce({ continue?: true, last: first }) do |acc, n|
-      {
-        continue?: acc[:continue?] && (acc[:last] + 1 == n),
-        last: n
-      }
-    end[:continue?]
+    sorted_vals = sorted_cards.map(&:to_i)
+    sorted_vals == (sorted_vals.min..sorted_vals.min + 4).to_a
   end
 
   def straight
