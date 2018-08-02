@@ -1,4 +1,5 @@
 require_relative 'rank'
+require_relative 'card'
 
 class RankResolver
   def initialize(cards)
@@ -14,7 +15,7 @@ class RankResolver
 
     Rank.new(
       name: :one_pair,
-      high: n_of_a_kind(2).flatten.map(&:to_i).max
+      high: Card.max(*n_of_a_kind(2).flatten).to_i
     )
   end
 
@@ -27,7 +28,7 @@ class RankResolver
 
     Rank.new(
       name: :two_pair,
-      high: n_of_a_kind(2).flatten.map(&:to_i).max
+      high: Card.max(*n_of_a_kind(2).flatten).to_i
     )
   end
 
@@ -66,7 +67,7 @@ class RankResolver
 
     Rank.new(
       name: :full_house,
-      high: [n_of_a_kind(3), n_of_a_kind(2)].flatten.map(&:to_i).max
+      high: n_of_a_kind(3).flatten.first.to_i
     )
   end
 
@@ -80,7 +81,7 @@ class RankResolver
 
     Rank.new(
       name: :straight,
-      high: high_card.to_i
+      high: Card.max(*@cards).to_i
     )
   end
 
@@ -93,7 +94,7 @@ class RankResolver
 
     Rank.new(
       name: :flush,
-      high: high_card.to_i
+      high: Card.max(*@cards).to_i
     )
   end
 
@@ -106,7 +107,7 @@ class RankResolver
 
     Rank.new(
       name: :straight_flush,
-      high: high_card.to_i
+      high: Card.max(*@cards).to_i
     )
   end
 
@@ -120,7 +121,7 @@ class RankResolver
 
     Rank.new(
       name: :royal_flush,
-      high: high_card.to_i
+      high: Card.max(*@cards).to_i
     )
   end
 
@@ -135,9 +136,5 @@ class RankResolver
 
   def sorted_cards
     @cards.sort_by(&:to_i)
-  end
-
-  def high_card
-    sorted_cards.last
   end
 end

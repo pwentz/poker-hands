@@ -22,7 +22,7 @@ class Hand
   end
 
   def high
-    @cards.max_by(&:to_i)
+    Card.max(*cards)
   end
 
   def method_missing(method, *args)
@@ -39,7 +39,7 @@ class Hand
         hands.any? { |hand| hand.send("#{rank}?") }
       end
 
-      return highest_card(*hands) if winning_rank.nil?
+      return high_card_hand(*hands) if winning_rank.nil?
 
       winning_hands = hands.find_all { |hand| hand.send("#{winning_rank}?") }
 
@@ -50,11 +50,11 @@ class Hand
       end
     end
 
-    def highest_card(*hands)
+    private
+
+    def high_card_hand(*hands)
       hands.max_by { |hand| hand.high.to_i }
     end
-
-    private
 
     def tiebreaker(rank, *hands)
       return if rank == :royal_flush

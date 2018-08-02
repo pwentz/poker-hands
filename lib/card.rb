@@ -17,12 +17,6 @@ class Card
   end
 
   def self.max(*cards)
-    cards.reduce do |highest, card|
-      if highest.to_i >= card.to_i
-        highest
-      else
-        card
-      end
-    end
+    cards.max_by(&:to_i)
   end
 end
