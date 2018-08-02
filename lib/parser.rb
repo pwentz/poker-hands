@@ -12,8 +12,8 @@ class Parser
 
     raw_str.split("\n").reduce({player_1: [], player_2: []}) do |acc, row|
       hands = {
-        player_1: row_to_cards(row).take(HAND_SIZE),
-        player_2: row_to_cards(row).drop(HAND_SIZE)
+        player_1: to_cards(row).take(HAND_SIZE),
+        player_2: to_cards(row).drop(HAND_SIZE)
       }
       acc.merge(hands) { |_, old, new| old.push(Hand.new(new)) }
     end
@@ -21,7 +21,7 @@ class Parser
 
   private
 
-  def row_to_cards(row)
+  def to_cards(row)
     row.split.map { |c| Card.new(c) }
   end
 end

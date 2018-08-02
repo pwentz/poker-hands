@@ -6,18 +6,18 @@ RSpec.describe Parser do
     it 'parses a text file' do
       hands = Parser.new(FileReaderMock.new).txt("some-file.txt")
 
-      cards_by_player = hands.transform_values do |val|
-        val.map { |hand| hand.cards.map(&:value) }
+      cards_by_player = hands.transform_values do |hands|
+        hands.map(&:to_a)
       end
 
       expect(cards_by_player[:player_1]).to eq([
-        %w{8 T K 9 4},
-        %w{5 A 5 A 9}
+        %w{8C TS KC 9H 4S},
+        %w{5C AD 5D AC 9C}
       ])
 
       expect(cards_by_player[:player_2]).to eq([
-        %w{7 2 5 3 A},
-        %w{7 5 8 T K}
+        %w{7D 2S 5D 3S AC},
+        %w{7C 5H 8D TD KS}
       ])
     end
   end
