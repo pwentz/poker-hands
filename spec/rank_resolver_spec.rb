@@ -3,7 +3,7 @@ require_relative '../lib/rank_resolver'
 RSpec.describe RankResolver do
   let(:resolver) { RankResolver.new(cards.map { |c| Card.new(c) }) }
 
-  describe '#pairs' do
+  describe '#one_pair' do
     context 'when there is a pair' do
       let(:cards) do
         ["4C", "TH", "KD", "4D", "AS"]
@@ -11,19 +11,33 @@ RSpec.describe RankResolver do
 
       it 'returns a rank object' do
         expect(resolver.one_pair?).to be true
-        expect(resolver.pairs.name).to eq :one_pair
+        expect(resolver.one_pair.name).to eq :one_pair
+        expect(resolver.one_pair.high).to eq 2
       end
     end
 
+    context 'when there are no pairs' do
+      let(:cards) do
+        ["4C", "5H", "TS", "4D", "4H"]
+      end
+
+      it 'returns an empty array' do
+        expect(resolver.one_pair?).to be false
+        expect(resolver.one_pair).to be_nil
+      end
+    end
+  end
+
+  describe '#two_pair' do
     context 'when there are multiple pairs' do
       let(:cards) do
-        ["4C", "TH", "4D", "KD", "KS"]
+        ["4C", "KH", "4D", "TD", "TS"]
       end
 
       it 'returns the pairs in descending order of value' do
-        expect(resolver.two_pairs?).to be true
-        expect(resolver.pairs.name).to eq :two_pair
-        expect(resolver.pairs.high).to eq 11
+        expect(resolver.two_pair?).to be true
+        expect(resolver.two_pair.name).to eq :two_pair
+        expect(resolver.two_pair.high).to eq 8
         # 2 3 4 5 6 7 8 9 T J Q  K  A
         # 0 1 2 3 4 5 6 7 8 9 10 11 12
       end
@@ -35,9 +49,8 @@ RSpec.describe RankResolver do
       end
 
       it 'returns an empty array' do
-        expect(resolver.one_pair?).to be false
-        expect(resolver.two_pairs?).to be false
-        expect(resolver.pairs).to be_nil
+        expect(resolver.two_pair?).to be false
+        expect(resolver.two_pair).to be_nil
       end
     end
   end

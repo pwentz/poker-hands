@@ -5,19 +5,28 @@ class RankResolver
     @cards = cards
   end
 
-  def two_pairs?
-    n_of_a_kind(2).length == 2
-  end
-
   def one_pair?
     n_of_a_kind(2).length == 1
   end
 
-  def pairs
-    return unless one_pair? || two_pairs?
+  def one_pair
+    return unless one_pair?
 
     Rank.new(
-      name: one_pair? ? :one_pair : :two_pair,
+      name: :one_pair,
+      high: n_of_a_kind(2).flatten.map(&:to_i).max
+    )
+  end
+
+  def two_pair?
+    n_of_a_kind(2).length == 2
+  end
+
+  def two_pair
+    return unless two_pair?
+
+    Rank.new(
+      name: :two_pair,
       high: n_of_a_kind(2).flatten.map(&:to_i).max
     )
   end

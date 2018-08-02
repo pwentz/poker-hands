@@ -3,20 +3,6 @@ require_relative '../lib/hand'
 RSpec.describe Hand do
   let(:hand) { Hand.new(cards) }
 
-  describe '#ranked' do
-    let(:cards) { ["8C", "2S", "8H", "2D", "8S"].map { |c| Card.new(c) } }
-
-    it 'returns ranked hands that cards qualify for, in descending order of value' do
-      expect(hand.ranked).to eq(
-        [
-          :full_house,
-          :three_of_a_kind,
-          :one_pair
-        ]
-      )
-    end
-  end
-
   describe '#high' do
     context 'when there is a single high card in the hand' do
       let(:high_card) { Card.new("JS") }
@@ -110,6 +96,125 @@ RSpec.describe Hand do
 
       it 'returns the hand with the high card' do
         expect(Hand.max(hand, hand_b)).to be hand
+      end
+    end
+
+    context 'when both hands have a full house' do
+      let(:cards) do
+        ["9C", "9H", "6H", "9D", "6S"].map { |c| Card.new(c) }
+      end
+
+      let(:hand_b_cards) do
+        ["8H", "8C", "8D", "7D", "7H"].map { |c| Card.new(c) }
+      end
+
+      it 'returns the hand with the higher three-of-a-kind' do
+        expect(Hand.max(hand, hand_b)).to be hand
+      end
+    end
+
+    context 'when both hands have a flush' do
+      let(:cards) do
+        ["3C", "6C", "2C", "9C", "JC"].map { |c| Card.new(c) }
+      end
+
+      let(:hand_b_cards) do
+        ["8H", "QH", "4H", "TH", "5H"].map { |c| Card.new(c) }
+      end
+
+      it 'returns the hand with the high card' do
+        expect(Hand.max(hand, hand_b)).to be hand_b
+      end
+    end
+
+    context 'when both hands have a straight' do
+      let(:cards) do
+        ["3C", "6D", "5S", "4C", "7H"].map { |c| Card.new(c) }
+      end
+
+      let(:hand_b_cards) do
+        ["8C", "9H", "6H", "TD", "7C"].map { |c| Card.new(c) }
+      end
+
+      it 'returns the hand with the high card' do
+        expect(Hand.max(hand, hand_b)).to be hand_b
+      end
+    end
+
+    context 'when both hands have three-of-a-kind' do
+      let(:cards) do
+        ["TC", "6D", "TS", "4C", "TH"].map { |c| Card.new(c) }
+      end
+
+      let(:hand_b_cards) do
+        ["7C", "QH", "6H", "7S", "7D"].map { |c| Card.new(c) }
+      end
+
+      it 'returns the hand with the higher three-of-a-kind' do
+        expect(Hand.max(hand, hand_b)).to be hand
+      end
+    end
+
+    context 'when both hands have two pairs' do
+      let(:cards) do
+        ["TS", "AD", "4S", "4C", "TH"].map { |c| Card.new(c) }
+      end
+
+      let(:hand_b_cards) do
+        ["JC", "JH", "9H", "7S", "9D"].map { |c| Card.new(c) }
+      end
+
+      xit 'returns the hand with the highest pair' do
+        expect(Hand.max(hand, hand_b)).to be hand_b
+      end
+    end
+
+    context 'when both hands have one pair' do
+      let(:cards) do
+        ["2C", "QH", "9H", "7S", "QD"].map { |c| Card.new(c) }
+      end
+
+      let(:hand_b_cards) do
+        ["AS", "6D", "JS", "4C", "JH"].map { |c| Card.new(c) }
+      end
+
+      xit 'returns the hand with the high pair' do
+        expect(Hand.max(hand, hand_b)).to be hand
+      end
+    end
+
+    context 'when both hands have no ranks' do
+      let(:cards) do
+        ["2C", "4H", "9H", "7S", "JD"].map { |c| Card.new(c) }
+      end
+
+      let(:hand_b_cards) do
+        ["TS", "6D", "QS", "4C", "3H"].map { |c| Card.new(c) }
+      end
+
+      it 'returns the hand with the high card' do
+        expect(Hand.max(hand, hand_b)).to be hand_b
+      end
+    end
+
+    context 'more than two hands' do
+      # 3 of a kind (9)
+      let(:cards) do
+        ["TC", "9C", "KC", "9D", "9H"].map { |c| Card.new(c) }
+      end
+
+      # two pair
+      let(:hand_b_cards) do
+        ["TH", "TD", "6H", "AH", "6D"].map { |c| Card.new(c) }
+      end
+
+      # 3 of a kind (4)
+      let(:hand_c) do
+        Hand.new(["4C", "TH", "4S", "JC", "4D"].map { |c| Card.new(c) })
+      end
+
+      it 'returns nil' do
+        expect(Hand.max(hand, hand_b, hand_c)).to be hand
       end
     end
   end
