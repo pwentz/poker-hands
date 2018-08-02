@@ -14,6 +14,8 @@ class Hand
     :one_pair
   ]
 
+  attr_reader :cards
+
   def initialize(cards)
     @cards = cards
     @resolver = RankResolver.new(cards)
