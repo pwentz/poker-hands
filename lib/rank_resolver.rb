@@ -73,6 +73,7 @@ class RankResolver
 
   def straight?
     sorted_vals = sorted_cards.map(&:to_i)
+
     sorted_vals == (sorted_vals.min..sorted_vals.min + 4).to_a
   end
 

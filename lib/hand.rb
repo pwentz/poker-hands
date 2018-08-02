@@ -25,6 +25,16 @@ class Hand
     Card.max(*cards)
   end
 
+  def rank
+    RANKS.find do |rank|
+      self.send("#{rank}?")
+    end
+  end
+
+  def to_a
+    cards.map(&:value).zip(cards.map(&:suit)).map(&:join)
+  end
+
   def method_missing(method, *args)
     if @resolver.respond_to?(method)
       @resolver.send(method, *args)
@@ -36,7 +46,7 @@ class Hand
   class << self
     def max(*hands)
       winning_rank = RANKS.find do |rank|
-        hands.any? { |hand| hand.send("#{rank}?") }
+        hands.any? { |hand| hand.rank == rank }
       end
 
       return high_card_hand(*hands) if winning_rank.nil?
