@@ -3,7 +3,7 @@ require_relative '../lib/hand'
 RSpec.describe Hand do
   let(:hand) { Hand.new(cards) }
 
-  describe '#high' do
+  describe '#high_card' do
     context 'when there is a single high card in the hand' do
       let(:high_card) { Card.new("JS") }
       let(:cards) do
@@ -17,7 +17,7 @@ RSpec.describe Hand do
       end
 
       it 'returns the high card' do
-        expect(hand.high).to be(high_card)
+        expect(hand.high_card).to be(high_card)
       end
     end
 
@@ -35,8 +35,44 @@ RSpec.describe Hand do
       end
 
       it 'returns the first high card' do
-        expect(hand.high).to be(high_card)
+        expect(hand.high_card).to be(high_card)
       end
+    end
+  end
+
+  describe '#rank_name' do
+    context 'when a hand could qualify for multiple ranks' do
+      let(:cards) do
+        ["TS", "7H", "7C", "TC", "TD"].map { |c| Card.new(c) }
+      end
+
+      it 'returns the highest rank that hand has achieved' do
+        expect(hand.rank_name).to be :full_house
+      end
+    end
+
+    context 'when a hand does not qualify for any ranks' do
+      let(:cards) do
+        ["TS", "2H", "7C", "4D", "JS"].map { |c| Card.new(c) }
+      end
+
+      it 'returns the highest rank that hand has achieved' do
+        expect(hand.rank_name).to be_nil
+      end
+    end
+  end
+
+  describe '#to_a' do
+    let(:string_cards) do
+      ["8S", "TD", "QH", "5C", "6S"]
+    end
+
+    let(:cards) do
+      string_cards.map { |c| Card.new(c) }
+    end
+
+    it 'returns an array of string representations of cards' do
+      expect(hand.to_a).to eq(string_cards)
     end
   end
 
