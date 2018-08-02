@@ -1,7 +1,7 @@
-require_relative '../lib/hand_resolver'
+require_relative '../lib/rank_resolver'
 
-RSpec.describe HandResolver do
-  let(:resolver) { HandResolver.new(cards.map { |c| Card.new(c) }) }
+RSpec.describe RankResolver do
+  let(:resolver) { RankResolver.new(cards.map { |c| Card.new(c) }) }
 
   describe '#pairs' do
     context 'when there is a pair' do
@@ -10,8 +10,8 @@ RSpec.describe HandResolver do
       end
 
       it 'returns a rank object' do
-        expect(resolver.one_pair?).to be(true)
-        expect(resolver.pairs.name).to eq(:one_pair)
+        expect(resolver.one_pair?).to be true
+        expect(resolver.pairs.name).to eq :one_pair
       end
     end
 
@@ -21,9 +21,9 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
-        expect(resolver.two_pairs?).to be(true)
-        expect(resolver.pairs.name).to eq(:two_pair)
-        expect(resolver.pairs.high).to eq(11)
+        expect(resolver.two_pairs?).to be true
+        expect(resolver.pairs.name).to eq :two_pair
+        expect(resolver.pairs.high).to eq 11
         # 2 3 4 5 6 7 8 9 T J Q  K  A
         # 0 1 2 3 4 5 6 7 8 9 10 11 12
       end
@@ -35,8 +35,8 @@ RSpec.describe HandResolver do
       end
 
       it 'returns an empty array' do
-        expect(resolver.one_pair?).to be(false)
-        expect(resolver.two_pairs?).to be(false)
+        expect(resolver.one_pair?).to be false
+        expect(resolver.two_pairs?).to be false
         expect(resolver.pairs).to be_nil
       end
     end
@@ -49,9 +49,9 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the cards' do
-        expect(resolver.three_of_a_kind?).to be(true)
-        expect(resolver.three_of_a_kind.name).to eq(:three_of_a_kind)
-        expect(resolver.three_of_a_kind.high).to eq(3)
+        expect(resolver.three_of_a_kind?).to be true
+        expect(resolver.three_of_a_kind.name).to eq :three_of_a_kind
+        expect(resolver.three_of_a_kind.high).to eq 3
       end
     end
 
@@ -61,20 +61,22 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
-        expect(resolver.three_of_a_kind?).to be(false)
+        expect(resolver.three_of_a_kind?).to be false
         expect(resolver.three_of_a_kind).to be_nil
       end
     end
   end
 
-  describe '#straight?' do
+  describe '#straight' do
     context 'when there is a straight in play' do
       let(:cards) do
         ["8C", "5H", "9C", "6D", "7S"]
       end
 
       it 'returns true' do
-        expect(resolver.straight?).to be(true)
+        expect(resolver.straight?).to be true
+        expect(resolver.straight.name).to be :straight
+        expect(resolver.straight.high).to be 7
       end
     end
 
@@ -84,19 +86,22 @@ RSpec.describe HandResolver do
       end
 
       it 'returns false' do
-        expect(resolver.straight?).to be(false)
+        expect(resolver.straight?).to be false
+        expect(resolver.straight).to be_nil
       end
     end
   end
 
-  describe '#flush?' do
+  describe '#flush' do
     context 'when there is a flush in play' do
       let(:cards) do
         ["KS", "8S", "2S", "6S", "JS"]
       end
 
       it 'returns true' do
-        expect(resolver.flush?).to be(true)
+        expect(resolver.flush?).to be true
+        expect(resolver.flush.name).to be :flush
+        expect(resolver.flush.high).to be 11
       end
     end
 
@@ -106,7 +111,8 @@ RSpec.describe HandResolver do
       end
 
       it 'returns false' do
-        expect(resolver.flush?).to be(false)
+        expect(resolver.flush?).to be false
+        expect(resolver.flush).to be_nil
       end
     end
   end
@@ -118,9 +124,9 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
-        expect(resolver.full_house?).to be(true)
-        expect(resolver.full_house.name).to eq(:full_house)
-        expect(resolver.full_house.high).to eq(11)
+        expect(resolver.full_house?).to be true
+        expect(resolver.full_house.name).to eq :full_house
+        expect(resolver.full_house.high).to eq 11
       end
     end
 
@@ -130,7 +136,7 @@ RSpec.describe HandResolver do
       end
 
       it 'returns nil' do
-        expect(resolver.full_house?).to be(false)
+        expect(resolver.full_house?).to be false
         expect(resolver.full_house).to be_nil
       end
     end
@@ -143,9 +149,9 @@ RSpec.describe HandResolver do
       end
 
       it 'returns the pairs in descending order of value' do
-        expect(resolver.four_of_a_kind?).to be(true)
-        expect(resolver.four_of_a_kind.name).to eq(:four_of_a_kind)
-        expect(resolver.four_of_a_kind.high).to eq(2)
+        expect(resolver.four_of_a_kind?).to be true
+        expect(resolver.four_of_a_kind.name).to eq :four_of_a_kind
+        expect(resolver.four_of_a_kind.high).to eq 2
       end
     end
 
@@ -155,20 +161,22 @@ RSpec.describe HandResolver do
       end
 
       it 'returns nil' do
-        expect(resolver.four_of_a_kind?).to be(false)
+        expect(resolver.four_of_a_kind?).to be false
         expect(resolver.four_of_a_kind).to be_nil
       end
     end
   end
 
-  describe '#straight_flush?' do
+  describe '#straight_flush' do
     context 'when a straight flush is present' do
       let(:cards) do
         ["8C", "5C", "9C", "6C", "7C"]
       end
 
       it 'returns true' do
-        expect(resolver.straight_flush?).to be(true)
+        expect(resolver.straight_flush?).to be true
+        expect(resolver.straight_flush.name).to be :straight_flush
+        expect(resolver.straight_flush.high).to be 7
       end
     end
 
@@ -178,19 +186,22 @@ RSpec.describe HandResolver do
       end
 
       it 'returns true' do
-        expect(resolver.straight_flush?).to be(false)
+        expect(resolver.straight_flush?).to be false
+        expect(resolver.straight_flush).to be_nil
       end
     end
   end
 
-  describe '#royal_flush?' do
+  describe '#royal_flush' do
     context 'when a royal flush is present' do
       let(:cards) do
         ["KC", "QC", "JC", "TC", "AC"]
       end
 
       it 'returns true' do
-        expect(resolver.royal_flush?).to be(true)
+        expect(resolver.royal_flush?).to be true
+        expect(resolver.royal_flush.name).to be :royal_flush
+        expect(resolver.royal_flush.high).to be 12
       end
     end
 
@@ -200,7 +211,8 @@ RSpec.describe HandResolver do
       end
 
       it 'returns true' do
-        expect(resolver.royal_flush?).to be(false)
+        expect(resolver.royal_flush?).to be false
+        expect(resolver.royal_flush).to be_nil
       end
     end
   end

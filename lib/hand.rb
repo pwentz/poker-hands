@@ -1,10 +1,10 @@
 require_relative './card'
-require_relative './hand_resolver'
+require_relative './rank_resolver'
 
 class Hand
   def initialize(cards)
     @cards = cards
-    @resolver = HandResolver.new(cards)
+    @resolver = RankResolver.new(cards)
   end
 
   def to_a
@@ -56,8 +56,8 @@ class Hand
     winning_hands = hands.find_all { |hand| hand.send("#{winning_rank}?") }
 
     if winning_hands.length >= 2
-      # winning_hands.max_by { |hand| hand.send(rank).high }
-      Hand.tiebreaker(winning_rank, *winning_hands)
+      return if winning_rank == :royal_flush
+      winning_hands.max_by { |hand| hand.send(winning_rank).high }
     else
       winning_hands.first
     end
@@ -82,6 +82,7 @@ class Hand
   def self.ranks
     [
       :royal_flush,
+      :four_of_a_kind,
       :full_house,
       :three_of_a_kind
     ]
