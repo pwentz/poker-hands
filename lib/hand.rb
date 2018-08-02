@@ -12,6 +12,7 @@ class Hand
   end
 
   def high
+    @cards.sort_by { |card| -card.to_i }.first
   end
 
   def score
@@ -43,6 +44,63 @@ class Hand
     else
       super
     end
+  end
+
+  def self.max(*hands)
+    winning_rank = ranks.find do |rank|
+      hands.any? { |hand| hand.send("#{rank}?") }
+    end
+
+    return Hand.higher_card(*hands) if winning_rank.nil?
+
+    winning_hands = hands.find_all { |hand| hand.send("#{winning_rank}?") }
+
+    if winning_hands.length >= 2
+      # winning_hands.max_by { |hand| hand.send(rank).high }
+      Hand.tiebreaker(winning_rank, *winning_hands)
+    else
+      winning_hands.first
+    end
+  end
+
+  def self.higher_card(*hands)
+    hands.max_by { |hand| hand.high.to_i }
+  end
+
+  private
+
+  def self.tiebreaker(rank, *hands)
+    tiebreaker_method = "#{rank}_tiebreaker"
+
+    if Hand.high_card_tiebreakers.include?(rank)
+      Hand.higher_card(*hands)
+    elsif Hand.respond_to?(tiebreaker_method)
+      Hand.send(tiebreaker_method, *hands)
+    end
+  end
+
+  def self.ranks
+    [
+      :royal_flush,
+      :full_house,
+      :three_of_a_kind
+    ]
+  end
+
+  def self.high_card_tiebreakers
+    [
+      :straight,
+      :straight_flush,
+      :flush
+    ]
+  end
+
+  def self.full_house_tiebreaker(*hands)
+    hands.max_by { |hand| hand.full_house.flatten.first.to_i }
+  end
+
+  def self.three_of_a_kind_tiebreaker(*hands)
+    hands.max_by { |hand| hand.three_of_a_kind.first.to_i }
   end
 end
 
