@@ -8,10 +8,7 @@ class Game
     @player_count = lines.sample.split.length / HAND_SIZE
 
     instantiate_hands(lines)
-
-    @player_count.times do |player_number|
-      set_score(player_number + 1, 0)
-    end
+    instantiate_scores
   end
 
   def get_hands(player)
@@ -43,6 +40,12 @@ class Game
 
         set_hands(idx + 1, [*existing_hands, hand])
       end
+    end
+  end
+
+  def instantiate_scores
+    @player_count.times do |player_number|
+      set_score(player_number + 1, 0)
     end
   end
 
