@@ -1,4 +1,4 @@
-require_relative '../lib/game'
+require './lib/game'
 
 RSpec.describe Game do
   let(:player_1_hand) { %w{JS 5C 6H TC 3S} }
@@ -27,9 +27,11 @@ RSpec.describe Game do
     end
   end
 
-  describe '#hands' do
+  describe '#player_hands' do
     it 'returns a hash of all the players and their hands' do
-      res = game.hands.transform_values { |hands| hands.map(&:to_a) }
+      res = game.player_hands.transform_values do |hands|
+        hands.map(&:to_a)
+      end
 
       expect(res).to eq({
         1 => [player_1_hand],

@@ -1,5 +1,5 @@
-require_relative 'rank'
-require_relative 'card'
+require './lib/rank'
+require './lib/card'
 
 class RankResolver
   def initialize(cards)
@@ -41,7 +41,7 @@ class RankResolver
 
     Rank.new(
       name: :three_of_a_kind,
-      high: n_of_a_kind(3).flatten.first.to_i
+      high: n_of_a_kind(3).flatten.sample.to_i
     )
   end
 
@@ -54,7 +54,7 @@ class RankResolver
 
     Rank.new(
       name: :four_of_a_kind,
-      high: n_of_a_kind(4).flatten.first.to_i
+      high: n_of_a_kind(4).flatten.sample.to_i
     )
   end
 
@@ -67,7 +67,7 @@ class RankResolver
 
     Rank.new(
       name: :full_house,
-      high: n_of_a_kind(3).flatten.first.to_i
+      high: n_of_a_kind(3).flatten.sample.to_i
     )
   end
 
@@ -132,7 +132,7 @@ class RankResolver
     @cards
       .group_by(&:value)
       .values
-      .find_all { |matches| matches.length == n }
+      .find_all { |matching_cards| matching_cards.length == n }
   end
 
   def sorted_cards

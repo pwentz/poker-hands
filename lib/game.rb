@@ -1,10 +1,14 @@
+require './lib/hand'
+require './lib/card'
+
 class Game
   HAND_SIZE = 5
 
   def initialize(lines)
     instantiate_hands(lines)
+    @player_count = instance_variables.length
 
-    instance_variables.length.times do |player_number|
+    @player_count.times do |player_number|
       set_score(player_number + 1, 0)
     end
   end
@@ -21,12 +25,8 @@ class Game
     set_score(player, get_score(player) + 1)
   end
 
-  def hands
-    player_count = instance_variables
-      .find_all { |ivar| ivar.to_s.include?("hands") }
-      .length
-
-    (1..player_count).to_a.each_with_object({}) do |player, acc|
+  def player_hands
+    (1..@player_count).to_a.each_with_object({}) do |player, acc|
       acc[player] = get_hands(player)
     end
   end

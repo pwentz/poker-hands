@@ -1,5 +1,5 @@
-require_relative './card'
-require_relative './rank_resolver'
+require './lib/card'
+require './lib/rank_resolver'
 
 class Hand
   RANK_NAMES = [

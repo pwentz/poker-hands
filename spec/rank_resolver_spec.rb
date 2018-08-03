@@ -1,4 +1,4 @@
-require_relative '../lib/rank_resolver'
+require './lib/rank_resolver'
 
 RSpec.describe RankResolver do
   let(:resolver) { RankResolver.new(cards.map { |c| Card.new(c) }) }

@@ -17,13 +17,13 @@ RSpec.describe Score do
       ]
     end
 
-    xit 'takes a Game object and mutates it to reflect outcome' do
+    it 'takes a Game object and mutates it to reflect outcome' do
       game = Game.new(lines)
 
       Score.tally(game)
 
-      expect(game.get_score(1)).to eq 0
-      expect(game.get_score(2)).to eq 2
+      expect(game.get_score(1)).to eq 2
+      expect(game.get_score(2)).to eq 0
     end
   end
 end

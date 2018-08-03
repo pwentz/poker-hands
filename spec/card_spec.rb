@@ -1,4 +1,4 @@
-require_relative '../lib/card'
+require './lib/card'
 
 RSpec.describe Card do
   describe "#value" do
