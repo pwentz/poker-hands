@@ -7,13 +7,13 @@ class Score
         .player_hands
         .transform_values { |hands| hands[idx] }
 
-      game.increment_score(winner(comparing_hands))
+      game.increment_score(winning_player(comparing_hands))
     end
   end
 
   private
 
-  def self.winner(hand_by_player)
+  def self.winning_player(hand_by_player)
     winning_hand = Hand.max(*hand_by_player.values)
 
     hand_by_player.keys.find do |player|

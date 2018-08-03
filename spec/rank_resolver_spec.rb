@@ -38,8 +38,6 @@ RSpec.describe RankResolver do
         expect(resolver.two_pair?).to be true
         expect(resolver.two_pair.name).to eq :two_pair
         expect(resolver.two_pair.high).to eq 8
-        # 2 3 4 5 6 7 8 9 T J Q  K  A
-        # 0 1 2 3 4 5 6 7 8 9 10 11 12
       end
     end
 

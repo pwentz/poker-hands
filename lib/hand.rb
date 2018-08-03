@@ -51,7 +51,7 @@ class Hand
 
       return high_card_hand(*hands) if top_rank_name.nil?
 
-      winning_hands = hands.find_all { |hand| hand.send("#{top_rank_name}?") }
+      winning_hands = hands.find_all(&:"#{top_rank_name}?")
 
       if winning_hands.length >= 2
         tiebreaker(top_rank_name, *winning_hands)

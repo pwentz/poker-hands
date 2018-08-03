@@ -5,8 +5,9 @@ class Game
   HAND_SIZE = 5
 
   def initialize(lines)
+    @player_count = lines.sample.split.length / HAND_SIZE
+
     instantiate_hands(lines)
-    @player_count = instance_variables.length
 
     @player_count.times do |player_number|
       set_score(player_number + 1, 0)

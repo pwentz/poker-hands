@@ -17,7 +17,16 @@ RSpec.describe Card do
     end
   end
 
-  describe '#compare' do
+  describe '#to_i' do
+    it 'returns the number value (ie score) of the card' do
+      card = Card.new("6C")
+      # 2 3 4 5 6 7 8 9 T J Q  K  A
+      # 0 1 2 3 4 5 6 7 8 9 10 11 12
+      expect(card.to_i).to eq 4
+    end
+  end
+
+  describe '.max' do
     context 'when one card has higher value than the other' do
       it 'returns the card with the higher value' do
         card_a = Card.new("QC")
