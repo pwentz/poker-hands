@@ -5,7 +5,7 @@ require './lib/file_reader'
 class Main
   class << self
     def go
-      lines = FileReader.readlines(File.join('public', 'poker.txt'))
+      lines = FileReader.readlines(ARGV[0] || File.join('public', 'poker.txt'))
       game = Game.new(lines)
 
       Score.tally(game)

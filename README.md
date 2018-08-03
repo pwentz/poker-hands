@@ -15,10 +15,16 @@ Build the docker container with the following command:
 docker-compose build
 ```
 
-Once the image is built, run the following command to output the results:
+Once the image is built, run the following command to output the results from [poker.txt](https://github.com/pwentz/poker-hands/blob/master/public/poker.txt):
 
 ```
 docker-compose run app ruby main.rb
+```
+
+You can also pass the app a text file (in the same format) and it will calculate the result of those hands:
+
+```
+docker-compose run app ruby main.rb path/to/file.txt
 ```
 
 ### Tests
