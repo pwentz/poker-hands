@@ -1,4 +1,4 @@
-require_relative '../lib/hand'
+require './lib/hand'
 
 RSpec.describe Hand do
   let(:hand) { Hand.new(cards) }
