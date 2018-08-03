@@ -1,5 +1,5 @@
 class FileReader
-  def read(file)
-    File.read(file)
+  def readlines(file)
+    File.read(file).split("\n")
   end
 end
