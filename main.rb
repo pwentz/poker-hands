@@ -1,7 +1,6 @@
 require './lib/hand'
 require './lib/parser'
 
-# Make Score ds
 # Move #tally to somewhere else and test it
 # fix issue w/ ranks and reusing same symbols
 

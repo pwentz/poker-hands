@@ -21,6 +21,16 @@ class Game
     set_score(player, get_score(player) + 1)
   end
 
+  def hands
+    player_count = instance_variables
+      .find_all { |ivar| ivar.to_s.include?("hands") }
+      .length
+
+    (1..player_count).to_a.each_with_object({}) do |player, acc|
+      acc[player] = get_hands(player)
+    end
+  end
+
   private
 
   def instantiate_hands(lines)
