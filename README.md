@@ -1,3 +1,7 @@
+### Requirements
+
+All you need is [Docker](https://store.docker.com/search?type=edition&offering=community) to be able to run the app locally.
+
 ### Getting Started
 
 Build the docker container with the following command:
