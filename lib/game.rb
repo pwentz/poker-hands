@@ -33,7 +33,7 @@ class Game
 
   def instantiate_hands(lines)
     lines.each do |line|
-      line.split.each_slice(HAND_SIZE).to_a.each_with_index do |cards, idx|
+      line.split.each_slice(HAND_SIZE).each_with_index do |cards, idx|
         existing_hands = get_hands(idx + 1) || []
 
         hand = Hand.new(cards.map { |card| Card.new(card) })
